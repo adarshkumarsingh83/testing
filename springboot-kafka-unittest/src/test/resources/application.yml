@@ -1,0 +1,5 @@
+kafka:
+  test:
+    topic: espark
+    group: espark-grp
+  bootstrap-servers: ${spring.embedded.kafka.brokers}
