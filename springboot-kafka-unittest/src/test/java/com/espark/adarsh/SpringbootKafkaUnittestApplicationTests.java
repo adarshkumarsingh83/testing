@@ -80,7 +80,7 @@ class SpringbootKafkaUnittestApplicationTests {
         String json = mapper.writeValueAsString(updatedBrandEvent);
 
         //assertThat(received, hasValue(json));
-
+        assertThat(received.value().contains(json));
         assertThat(received).has(key(null));
     }
 
