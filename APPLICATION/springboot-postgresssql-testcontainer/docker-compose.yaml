@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  espark-mysql:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - 3306:3306
+  spring-boot-jpa-docker-webapp:
+    image: springboot-mysql-docker
+    depends_on:
+      - espark-mysql
+    links:
+      - espark-mysql
+    ports:
+      - 9090:9090
+    environment:
+      - DATABASE_HOST=${MYSQL_HOST}
+      - DATABASE_USER=${MYSQL_USER}
+      - DATABASE_PASSWORD=${MYSQL_PASSWORD}
+      - DATABASE_NAME=${MYSQL_DATABASE}
+      - DATABASE_PORT=${MYSQL_PORT}
