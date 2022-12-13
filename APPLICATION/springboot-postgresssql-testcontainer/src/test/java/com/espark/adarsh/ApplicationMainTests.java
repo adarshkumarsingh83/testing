@@ -34,6 +34,7 @@ class ApplicationMainTests {
     static public PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:11.1")
             .withDatabaseName("esparkdb")
             .withUsername("root")
+            //.withInitScript("sql/db.sql")
             .withPassword("root");
 
 
