@@ -3,7 +3,6 @@ package com.espark.adarsh;
 import com.espark.adarsh.entities.Employee;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +15,6 @@ import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
@@ -31,8 +29,7 @@ import java.util.Map;
 
 @Slf4j
 @Testcontainers
-@DataMongoTest(excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@DataMongoTest(excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
 class SpringbootMongodbTestcontainerApplicationTests {
 
     @Autowired
@@ -42,23 +39,21 @@ class SpringbootMongodbTestcontainerApplicationTests {
     private int localServerPort;
 
     @Container
-    static MongoDBContainer container = new  MongoDBContainer(DockerImageName.parse("mongo:4.0.10"))
-            .withExposedPorts(27017);
+    static MongoDBContainer mongo = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
 
     @BeforeAll
     static void setUpAll() {
-        container.waitingFor(Wait.forListeningPort()
-                       .withStartupTimeout(Duration.ofSeconds(180L)));
+        mongo.start();
+        mongo.waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(180L)));
     }
 
     @DynamicPropertySource
     static void databaseProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", container::getReplicaSetUrl);
+        registry.add("spring.data.mongodb.uri", mongo::getConnectionString);
     }
 
     @Test
     public void testGetAllEmployees() {
-        container.start();
         RestTemplate restTemplate = restTemplateBuilder.rootUri("http://localhost:" + localServerPort + "/api").build();
         ResponseEntity<List<Employee>> response = restTemplate.exchange("/employee", HttpMethod.GET, null, new ParameterizedTypeReference<List<Employee>>() {
         }, new Object[]{});
