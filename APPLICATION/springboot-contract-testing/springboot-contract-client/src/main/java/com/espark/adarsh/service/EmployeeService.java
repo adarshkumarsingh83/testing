@@ -1,21 +1,18 @@
 package com.espark.adarsh.service;
 
+import com.espark.adarsh.entity.ApplicationResponseBean;
 import com.espark.adarsh.entity.Employee;
-import com.espark.adarsh.exception.EmployeeNotFoundException;
-import com.espark.adarsh.respository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Field;
-import java.util.LinkedList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -24,29 +21,81 @@ public class EmployeeService {
     RestTemplate restTemplate;
 
     public List<Employee> getAllEmployee() {
-        ResponseEntity<List<Employee>> responseEntity =  this.restTemplate.getForObject("http://localhost:9090/employees", ResponseEntity.class,new Object[]{});
-        return responseEntity.getBody();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<Employee> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<ApplicationResponseBean<List<Employee>>> responseEntity
+                = restTemplate.exchange("http://localhost:8080/employees"
+                , HttpMethod.GET, httpEntity, new ParameterizedTypeReference<ApplicationResponseBean<List<Employee>>>() {
+                }, new Object());
+        return (responseEntity.getStatusCode().is2xxSuccessful() ? responseEntity.getBody().getData() : null);
     }
 
     public Employee getEmployee(Long id) {
-        ResponseEntity<Employee> responseEntity =  this.restTemplate.getForObject("http://localhost:9090/employee/{id}", ResponseEntity.class,id);
-        return responseEntity.getBody();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<Employee> httpEntity = new HttpEntity<>(headers);
+        Map<String, String> vars = new HashMap<>();
+        vars.put("id", id.toString());
+        ResponseEntity<ApplicationResponseBean<Employee>> responseEntity =
+                restTemplate.exchange("http://localhost:8080/employee/{id}"
+                        , HttpMethod.GET, httpEntity, new ParameterizedTypeReference<ApplicationResponseBean<Employee>>() {
+                        }, vars);
+        return (responseEntity.getStatusCode().is2xxSuccessful() ? responseEntity.getBody().getData() : null);
     }
 
     public Employee removeEmployee(Long id) {
-      return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<Employee> httpEntity = new HttpEntity<>(headers);
+        Map<String, String> vars = new HashMap<>();
+        vars.put("id", id.toString());
+        ResponseEntity<ApplicationResponseBean<Employee>> responseEntity
+                = restTemplate.exchange("http://localhost:8080/employee/{id}"
+                , HttpMethod.DELETE, httpEntity, new ParameterizedTypeReference<ApplicationResponseBean<Employee>>() {
+                }, vars);
+        return (responseEntity.getStatusCode().is2xxSuccessful() ? responseEntity.getBody().getData() : null);
     }
 
     public Employee saveEmployee(Employee employee) {
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<Employee> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<ApplicationResponseBean<Employee>> responseEntity
+                = restTemplate.exchange("http://localhost:8080/employee"
+                , HttpMethod.POST, httpEntity, new ParameterizedTypeReference<ApplicationResponseBean<Employee>>() {
+                }, new Object());
+        return (responseEntity.getStatusCode().is2xxSuccessful() ? responseEntity.getBody().getData() : null);
     }
 
     public Employee updateEmployee(Long id, Employee employee) {
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<Employee> httpEntity = new HttpEntity<>(employee, headers);
+        Map<String, String> vars = new HashMap<>();
+        vars.put("id", id.toString());
+        ResponseEntity<ApplicationResponseBean<Employee>> responseEntity
+                = restTemplate.exchange("http://localhost:8080/employee/{id}"
+                , HttpMethod.PUT, httpEntity, new ParameterizedTypeReference<ApplicationResponseBean<Employee>>() {}, vars);
+        return (responseEntity.getStatusCode().is2xxSuccessful() ? responseEntity.getBody().getData() : null);
     }
 
     public Employee updatePartialEmployee(@PathVariable("id") Long id, Map<String, Object> employee) {
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(employee, headers);
+        Map<String, String> vars = new HashMap<>();
+        vars.put("id", id.toString());
+        ResponseEntity<ApplicationResponseBean<Employee>> responseEntity
+                = restTemplate.exchange("http://localhost:8080/employee/{id}"
+                , HttpMethod.PATCH, httpEntity, new ParameterizedTypeReference<ApplicationResponseBean<Employee>>() {}, vars);
+        return (responseEntity.getStatusCode().is2xxSuccessful() ? responseEntity.getBody().getData() : null);
     }
 
 }

@@ -1,6 +1,9 @@
 {
+  "data": {
     "id": 1,
     "firstName": "adarsh",
     "lastName": "kumar",
     "career": "It"
+  },
+  "message": "Data Fetch Successfully"
 }
