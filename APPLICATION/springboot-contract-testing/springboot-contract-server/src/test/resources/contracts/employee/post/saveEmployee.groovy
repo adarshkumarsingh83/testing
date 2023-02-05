@@ -12,7 +12,7 @@ Contract.make {
             contentType(applicationJson())
             accept(applicationJson())
         }
-        body (file("employee-input.json"))
+        body (file("employee-post-input.json"))
         url "/employee"
     }
 
@@ -21,6 +21,6 @@ Contract.make {
         headers {
             contentType(applicationJson())
         }
-        body (file("employee.json"))
+        body (file("employee-post-output.json"))
     }
 }

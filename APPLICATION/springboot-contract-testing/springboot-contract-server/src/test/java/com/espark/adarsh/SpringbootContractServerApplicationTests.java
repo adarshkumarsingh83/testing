@@ -25,11 +25,13 @@ public abstract class SpringbootContractServerApplicationTests {
 
     private static final Employee employeeInput = new Employee("adarsh", "kumar", "It");
     private static final Employee employeeResponse = new Employee(1L, "adarsh", "kumar", "It");
+    private static  final Employee employeeUpdate = new Employee(1l,"adarsh", "kumar", "It-team");;
+    private static  final Employee employeePartialUpdate = new Employee(1l,"adarsh", "kumar", "It-Head");;
     private static final Map<String,Object> employeeMap = new HashMap<>() {
         {
             put("id","1");
             put("firstName","adarsh");
-            put("lastName", "kumar");
+            put("career", "It-Head");
         }
     };
     @Autowired
@@ -58,10 +60,10 @@ public abstract class SpringbootContractServerApplicationTests {
                 .thenReturn(employeeResponse);
 
         Mockito.when(employeeService.updateEmployee(anyLong(), any(Employee.class)))
-                .thenReturn(employeeResponse);
+                .thenReturn(employeeUpdate);
 
         Mockito.when(employeeService.updatePartialEmployee(anyLong(), any(Map.class)))
-                .thenReturn(employeeResponse);
+                .thenReturn(employeePartialUpdate);
     }
 
     @Test
@@ -92,7 +94,8 @@ public abstract class SpringbootContractServerApplicationTests {
 
     @Test
     void updateEmployeeTest() {
-        Assertions.assertNotNull(employeeService.updateEmployee(1L, employeeInput));
+
+        Assertions.assertNotNull(employeeService.updateEmployee(1L, employeeUpdate));
     }
 
     @Test

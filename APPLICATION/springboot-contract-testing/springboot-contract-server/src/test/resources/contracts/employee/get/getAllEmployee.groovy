@@ -15,6 +15,6 @@ Contract.make {
         headers {
             contentType applicationJson()
         }
-        body (file("employees.json"))
+        body (file("employees-get-output.json"))
     }
 }
