@@ -72,7 +72,7 @@ class SpringbootContractClientApplicationTests {
         Map<String,Object> employeeDate = new HashMap<>(){
             {
                 put("id","1");
-                put("firstName","Adarsh");
+                put("firstName","adarsh");
                 put("career","It-Head");
             }
         };
