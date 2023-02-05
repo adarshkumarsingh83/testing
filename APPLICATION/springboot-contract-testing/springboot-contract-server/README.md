@@ -3,9 +3,8 @@
 
 ---- 
 
-
 ### to build the application
-* $ mvn clean package
+* $ mvn clean install
 
 ### To Run the application
 * $ mvn spring-boot:run
