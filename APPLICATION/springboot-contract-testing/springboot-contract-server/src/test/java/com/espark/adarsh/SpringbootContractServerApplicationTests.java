@@ -1,7 +1,6 @@
 package com.espark.adarsh;
 
 import com.espark.adarsh.entity.Employee;
-import com.espark.adarsh.respository.EmployeeRepository;
 import com.espark.adarsh.service.EmployeeService;
 import com.espark.adarsh.web.EmployeeController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -22,12 +21,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 @SpringBootTest(classes = SpringbootContractServerApplication.class)
-public class SpringbootContractServerApplicationTests {
+public abstract class SpringbootContractServerApplicationTests {
 
     private static final Employee employeeInput = new Employee("adarsh", "kumar", "It");
     private static final Employee employeeResponse = new Employee(1L, "adarsh", "kumar", "It");
-    private static final Map<String,Object> employeeMap = new HashMap<>()
-    {
+    private static final Map<String,Object> employeeMap = new HashMap<>() {
         {
             put("id","1");
             put("firstName","adarsh");

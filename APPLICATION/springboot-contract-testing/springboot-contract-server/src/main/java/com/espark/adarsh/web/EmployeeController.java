@@ -40,10 +40,7 @@ public class EmployeeController {
                 .body(responseBean);
     }
 
-    @PostMapping(path = "/employee",
-            produces = APPLICATION_JSON_VALUE,
-            consumes = APPLICATION_JSON_VALUE
-    )
+    @PostMapping("/employee")
     public ResponseEntity<ApplicationResponseBean<Employee>> saveEmployee(@RequestBody Employee employee) {
         ApplicationResponseBean<Employee> responseBean =
                 new ApplicationResponseBean<>(employeeService.saveEmployee(employee), "Operation Successfully");

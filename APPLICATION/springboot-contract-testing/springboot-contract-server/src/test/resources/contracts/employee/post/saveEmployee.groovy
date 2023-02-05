@@ -10,8 +10,9 @@ Contract.make {
         method POST()
         headers {
             contentType(applicationJson())
+            accept(applicationJson())
         }
-        body (file("employee.json"))
+        body (file("employee-input.json"))
         url "/employee"
     }
 
