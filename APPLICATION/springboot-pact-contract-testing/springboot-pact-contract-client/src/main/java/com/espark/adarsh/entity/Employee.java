@@ -1,7 +1,10 @@
 package com.espark.adarsh.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Employee {
 
      private Long id;
@@ -55,6 +58,17 @@ public class Employee {
 
     public void setCareer(String career) {
         this.career = career;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", career='" + career + '\'' +
+                '}';
     }
 }
 

@@ -1,109 +1,40 @@
 package com.espark.adarsh;
 
-import com.espark.adarsh.entity.Employee;
-import com.espark.adarsh.service.EmployeeService;
-import com.espark.adarsh.web.EmployeeController;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.web.context.WebApplicationContext;
+import au.com.dius.pact.provider.junit.Provider;
+import au.com.dius.pact.provider.junit.State;
+import au.com.dius.pact.provider.junit.loader.PactFolder;
+import au.com.dius.pact.provider.junit5.PactVerificationContext;
+import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.SpringApplication;
+import au.com.dius.pact.provider.junit5.HttpTestTarget;
+import org.springframework.web.context.ConfigurableWebApplicationContext;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-
-@SpringBootTest(classes = SpringbootContractServerApplication.class)
+@Provider("service_provider")
+@PactFolder("pacts")
 public abstract class SpringbootContractServerApplicationTests {
+    private static ConfigurableWebApplicationContext application;
 
-    private static final Employee employeeInput = new Employee("adarsh", "kumar", "It");
-    private static final Employee employeeResponse = new Employee(1L, "adarsh", "kumar", "It");
-    private static  final Employee employeeUpdate = new Employee(1l,"adarsh", "kumar", "It-team");;
-    private static  final Employee employeePartialUpdate = new Employee(1l,"adarsh", "kumar", "It-Head");;
-    private static final Map<String,Object> employeeMap = new HashMap<>() {
-        {
-            put("id","1");
-            put("firstName","adarsh");
-            put("career", "It-Head");
-        }
-    };
-    @Autowired
-    WebApplicationContext webApplicationContext;
+    @TestTemplate
+    @ExtendWith(PactVerificationInvocationContextProvider.class)
+    void pactVerificationTestTemplate(PactVerificationContext context) {
+        context.verifyInteraction();
+    }
 
-    @MockBean
-    EmployeeService employeeService;
-
-    @Autowired
-    EmployeeController employeeController;
+    @BeforeAll
+    public static void start() {
+        application = (ConfigurableWebApplicationContext) SpringApplication.run(SpringbootContractServerApplication.class);
+    }
 
     @BeforeEach
-    public void init() {
-        RestAssuredMockMvc.standaloneSetup(employeeController);
-
-        Mockito.when(employeeService.saveEmployee(any(Employee.class)))
-                .thenReturn(employeeResponse);
-
-        Mockito.when(employeeService.getEmployee(anyLong()))
-                .thenReturn(employeeResponse);
-
-        Mockito.when(employeeService.getAllEmployee())
-                .thenReturn(Arrays.asList(employeeResponse));
-
-        Mockito.when(employeeService.removeEmployee(anyLong()))
-                .thenReturn(employeeResponse);
-
-        Mockito.when(employeeService.updateEmployee(anyLong(), any(Employee.class)))
-                .thenReturn(employeeUpdate);
-
-        Mockito.when(employeeService.updatePartialEmployee(anyLong(), any(Map.class)))
-                .thenReturn(employeePartialUpdate);
-    }
-
-    @Test
-    void contextLoads() {
-        Assertions.assertNotNull(webApplicationContext);
-    }
-
-    @Test
-    void saveEmployeeTest() {
-        Assertions.assertNotNull(employeeService.saveEmployee(employeeInput));
-    }
-
-    @Test
-    void getEmployeeTest() {
-        Assertions.assertNotNull(employeeService.getEmployee(1L));
+    void before(PactVerificationContext context) {
+        context.setTarget(new HttpTestTarget("localhost", 8082, "/spring-rest"));
     }
 
 
-    @Test
-    void getAllEmployeeTest() {
-        Assertions.assertNotNull(employeeService.getAllEmployee());
-    }
-
-    @Test
-    void updatePartialEmployeeTest() {
-        Assertions.assertNotNull(employeeService.updatePartialEmployee(1L, employeeMap));
-    }
-
-    @Test
-    void updateEmployeeTest() {
-
-        Assertions.assertNotNull(employeeService.updateEmployee(1L, employeeUpdate));
-    }
-
-    @Test
-    void removeEmployee() {
-        Assertions.assertNotNull(employeeService.removeEmployee(1L));
-    }
-
-
+    @State("Test GET employee with id ")
+    public void toGetState() { }
 
 
 }

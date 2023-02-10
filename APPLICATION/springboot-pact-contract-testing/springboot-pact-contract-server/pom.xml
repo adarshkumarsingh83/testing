@@ -34,9 +34,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-contract-verifier</artifactId>
-			<scope>test</scope>
+			<groupId>au.com.dius</groupId>
+			<artifactId>pact-jvm-provider-junit5_2.12</artifactId>
+			<version>3.6.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -62,16 +62,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-contract-maven-plugin</artifactId>
-				<version>4.0.1</version>
-				<extensions>true</extensions>
-				<configuration>
-					<testFramework>JUNIT5</testFramework>
-					<baseClassForTests>com.espark.adarsh.SpringbootContractServerApplicationTests</baseClassForTests>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
