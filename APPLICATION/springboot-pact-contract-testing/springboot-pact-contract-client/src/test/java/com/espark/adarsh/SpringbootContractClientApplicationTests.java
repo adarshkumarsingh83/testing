@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ExtendWith(PactConsumerTestExt.class)
@@ -34,7 +35,6 @@ class SpringbootContractClientApplicationTests {
     public static final String PACT_CONSUMER_NAME ="service_consumer";
 
     private RestTemplate restTemplate;
-
 
 
     @Pact(consumer = SpringbootContractClientApplicationTests.PACT_CONSUMER_NAME
@@ -265,18 +265,34 @@ class SpringbootContractClientApplicationTests {
     @PactTestFor(pactMethod = "getEmployeeById"
             ,providerName = SpringbootContractClientApplicationTests.PACT_PROVIDER_NAME)
     public void verifyGetEmployeeByIdPact(MockServer mockServer) {
-        val result = restTemplate
-                .getForObject(mockServer.getUrl() + "/employee/1", ApplicationResponseBean.class);
-        Assertions.assertEquals(result.toString(), "ApplicationResponseBean(data={firstName=adarsh, lastName=kumar, career=It, id=1}, message=Data Fetch Successfully)");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<Employee> httpEntity = new HttpEntity<>(headers);
+        Map<String, String> vars = new HashMap<>();
+        vars.put("id", "1");
+        ResponseEntity<ApplicationResponseBean<Employee>> responseEntity
+                = restTemplate.exchange(mockServer.getUrl() +"/employee/{id}"
+                , HttpMethod.GET, httpEntity, new ParameterizedTypeReference<ApplicationResponseBean<Employee>>() {
+                }, vars);
+
+        Assertions.assertEquals(responseEntity.getBody().toString(), "ApplicationResponseBean(data=Employee{id=1, firstName='adarsh', lastName='kumar', career='It'}, message=Data Fetch Successfully)");
     }
 
     @Test
     @PactTestFor(pactMethod = "getEmployees"
             ,providerName = SpringbootContractClientApplicationTests.PACT_PROVIDER_NAME)
     public void verifyGetEmployeesPact(MockServer mockServer) {
-        val result =restTemplate
-                .getForObject(mockServer.getUrl() + "/employees", ApplicationResponseBean.class);
-        Assertions.assertEquals(result.toString(), "ApplicationResponseBean(data=[{firstName=adarsh, lastName=kumar, career=It, id=1}, {firstName=radha, lastName=singh, career=It, id=2}, {firstName=sonu, lastName=singh, career=It, id=3}, {firstName=amit, lastName=kumar, career=Finance, id=4}], message=Data Fetch Successfully)");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<Employee> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<ApplicationResponseBean<List<Employee>>> responseEntity
+                = restTemplate.exchange(mockServer.getUrl() +"/employees"
+                , HttpMethod.GET, httpEntity, new ParameterizedTypeReference<ApplicationResponseBean<List<Employee>>>() {
+                }, new Object());
+        Assertions.assertEquals(responseEntity.getBody().toString(), "ApplicationResponseBean(data=[Employee{id=1, firstName='adarsh', lastName='kumar', career='It'}, Employee{id=2, firstName='radha', lastName='singh', career='It'}, Employee{id=3, firstName='sonu', lastName='singh', career='It'}, Employee{id=4, firstName='amit', lastName='kumar', career='Finance'}], message=Data Fetch Successfully)");
     }
 
     @Test
@@ -292,9 +308,11 @@ class SpringbootContractClientApplicationTests {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<Employee> httpEntity = new HttpEntity<>(employee,headers);
-        val result = restTemplate
-                .postForObject(mockServer.getUrl() + "/employee", httpEntity,ApplicationResponseBean.class);
-        Assertions.assertEquals(result.toString(), "ApplicationResponseBean(data={firstName=adarsh, lastName=kumar, career=It, id=1}, message=Data Saved Successfully)");
+        ResponseEntity<ApplicationResponseBean<Employee>> responseEntity
+                = restTemplate.exchange(mockServer.getUrl()+"/employee"
+                , HttpMethod.POST, httpEntity, new ParameterizedTypeReference<ApplicationResponseBean<Employee>>() {
+                }, new Object());
+        Assertions.assertEquals(responseEntity.getBody().toString(), "ApplicationResponseBean(data=Employee{id=1, firstName='adarsh', lastName='kumar', career='It'}, message=Data Saved Successfully)");
     }
 
 
