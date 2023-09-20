@@ -3,6 +3,7 @@ package com.espark.adarsh.service;
 import com.espark.adarsh.bean.ResponseBean;
 import com.espark.adarsh.entity.Employee;
 import com.espark.adarsh.exception.EmployeeNotFoundException;
+import com.espark.adarsh.exception.handler.ApplicationExceptionHandler;
 import com.espark.adarsh.filter.EmployeeFilter;
 import com.espark.adarsh.filter.FilterField;
 import com.espark.adarsh.respository.EmployeeRepository;
@@ -17,6 +18,9 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -33,11 +37,15 @@ public class EmployeeServiceTest {
     @Mock
     EmployeeRepository employeeRepository;
 
-    EmployeeFilter filter;
+    @InjectMocks
+    ApplicationExceptionHandler exceptionHandler;
 
+    EmployeeFilter filter;
 
     @BeforeEach
     public void init() {
+        ReflectionTestUtils.setField(employeeService,"successMessage","api executed successfully");
+        ReflectionTestUtils.setField(exceptionHandler,"failureMessage","api execution failed");
         filter = new EmployeeFilter();
         filter.setSalary(new FilterField() {
             {

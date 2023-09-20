@@ -7,6 +7,7 @@ import com.espark.adarsh.filter.EmployeeFilter;
 import com.espark.adarsh.filter.FilterField;
 import com.espark.adarsh.respository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -20,6 +21,14 @@ import java.util.Optional;
 @Service
 public class EmployeeService {
 
+
+    @Value("${application.success.msg}")
+    String successMessage;
+
+
+
+
+
     @Autowired
     EmployeeRepository employeeRepository;
 
@@ -28,6 +37,7 @@ public class EmployeeService {
         this.employeeRepository.findAll().forEach(employee -> employeeList.add(employee));
         return ResponseBean.<List<Employee>>builder()
                 .data(employeeList)
+                .message(successMessage)
                 .build();
 
     }
@@ -35,7 +45,9 @@ public class EmployeeService {
     public ResponseBean<Employee> getEmployee(Long id) throws EmployeeNotFoundException {
         Employee employee = this.employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("employee not found", id));
-        return ResponseBean.<Employee>builder().data(employee).build();
+        return ResponseBean.<Employee>builder().data(employee)
+                .message(successMessage)
+                .build();
     }
 
     public ResponseBean<Employee> removeEmployee(Long id) throws EmployeeNotFoundException {
@@ -43,18 +55,24 @@ public class EmployeeService {
                 .orElseThrow(() -> new EmployeeNotFoundException("employee not found", id));
         this.employeeRepository.deleteById(id);
         return ResponseBean.<Employee>builder()
-                .data(employee).build();
+                .data(employee)
+                .message(successMessage)
+                .build();
     }
 
     public ResponseBean<Employee> saveEmployee(Employee employee) {
 
         return ResponseBean.<Employee>builder()
-                .data(this.employeeRepository.save(employee)).build();
+                .data(this.employeeRepository.save(employee))
+                .message(successMessage)
+                .build();
     }
 
     public ResponseBean<Employee> updateEmployee(Long id, Employee employee) {
         return ResponseBean.<Employee>builder()
-                .data(this.employeeRepository.save(employee)).build();
+                .data(this.employeeRepository.save(employee))
+                .message(successMessage)
+                .build();
     }
 
 
@@ -69,7 +87,9 @@ public class EmployeeService {
             });
 
             return ResponseBean.<Employee>builder()
-                    .data(this.employeeRepository.save(employeeOptional.get())).build();
+                    .data(this.employeeRepository.save(employeeOptional.get()))
+                    .message(successMessage)
+                    .build();
         }
         throw new EmployeeNotFoundException("employee not found", id);
     }
@@ -87,10 +107,12 @@ public class EmployeeService {
         if (spec != null)
         return ResponseBean.<Iterable<Employee>>builder()
                 .data(employeeRepository.findAll(spec))
+                .message(successMessage)
                 .build();
         else
             return ResponseBean.<Iterable<Employee>>builder()
                     .data(employeeRepository.findAll())
+                    .message(successMessage)
                     .build();
     }
 

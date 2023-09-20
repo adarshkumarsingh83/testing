@@ -94,7 +94,7 @@ class SpringbootRestTemplateWebTests {
     @Test
     public void testGetEmployees() throws Exception {
         HttpEntity entity = new HttpEntity<>("");
-        ResponseEntity<ResponseBean<Employee>> response = this.restTemplate.exchange(url + "employee/1", HttpMethod.GET
+        ResponseEntity<ResponseBean<Employee>> response = this.restTemplate.exchange(url + "employee/100", HttpMethod.GET
                 , entity, new ParameterizedTypeReference<ResponseBean<Employee>>() {
                 });
         ResponseBean<Employee> responseBean = response.getBody();
