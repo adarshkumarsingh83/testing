@@ -1,0 +1,16 @@
+{
+    "id": 10,
+    "firstName": "amit",
+    "lastName": "kumar",
+    "career": "Finance",
+    "salary": 8,
+    "doj": "2020-01-01",
+    "gender": "MALE",
+    "attributes": {
+        "key4": "value"
+    },
+    "phone": [
+        "1234567890",
+        "1234567890"
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "id": 10,
+    "firstName": "sonu",
+    "lastName": "singh",
+    "career": "IT",
+    "salary": 5,
+    "doj": "2020-01-01",
+    "gender": "MALE",
+    "attributes": {
+        "key3": "value"
+    },
+    "phone": [
+        "1234567890",
+        "1234567890"
+    ]
+}
