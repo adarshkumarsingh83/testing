@@ -1,0 +1,247 @@
+{
+  "provider": {
+    "name": "service_provider"
+  },
+  "consumer": {
+    "name": "service_consumer"
+  },
+  "interactions": [
+    {
+      "description": "DELETE REQUEST",
+      "request": {
+        "method": "DELETE",
+        "path": "/employee/1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "data": {
+            "firstName": "adarsh",
+            "lastName": "kumar",
+            "career": "It",
+            "id": 1
+          },
+          "message": "Data Deleted Successfully"
+        }
+      },
+      "providerStates": [
+        {
+          "name": "Test DELETE employee BY id "
+        }
+      ]
+    },
+    {
+      "description": "GET REQUEST",
+      "request": {
+        "method": "GET",
+        "path": "/employee/1"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "data": {
+            "firstName": "adarsh",
+            "lastName": "kumar",
+            "career": "It",
+            "id": 1
+          },
+          "message": "Data Fetch Successfully"
+        }
+      },
+      "providerStates": [
+        {
+          "name": "Test GET employee with id "
+        }
+      ]
+    },
+    {
+      "description": "GET REQUEST",
+      "request": {
+        "method": "GET",
+        "path": "/employees"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "data": [
+            {
+              "firstName": "adarsh",
+              "lastName": "kumar",
+              "career": "It",
+              "id": 1
+            },
+            {
+              "firstName": "radha",
+              "lastName": "singh",
+              "career": "It",
+              "id": 2
+            },
+            {
+              "firstName": "sonu",
+              "lastName": "singh",
+              "career": "It",
+              "id": 3
+            },
+            {
+              "firstName": "amit",
+              "lastName": "kumar",
+              "career": "Finance",
+              "id": 4
+            }
+          ],
+          "message": "Data Fetch Successfully"
+        },
+        "matchingRules": {
+          "body": {
+            "$.data": {
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 0
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "Test Get Employees"
+        }
+      ]
+    },
+    {
+      "description": "PATCH REQUEST",
+      "request": {
+        "method": "PATCH",
+        "path": "/employee/1",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "firstName": "adarsh",
+          "career": "It-Head",
+          "id": 1
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "data": {
+            "firstName": "adarsh",
+            "lastName": "kumar",
+            "career": "It-Head",
+            "id": 1
+          },
+          "message": "Data Updated Successfully"
+        }
+      },
+      "providerStates": [
+        {
+          "name": "Test Patch Employee "
+        }
+      ]
+    },
+    {
+      "description": "POST REQUEST",
+      "request": {
+        "method": "POST",
+        "path": "/employee",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "firstName": "adarsh",
+          "lastName": "kumar",
+          "career": "It"
+        }
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "data": {
+            "firstName": "adarsh",
+            "lastName": "kumar",
+            "career": "It",
+            "id": 1
+          },
+          "message": "Data Saved Successfully"
+        }
+      },
+      "providerStates": [
+        {
+          "name": "Test Post Employee "
+        }
+      ]
+    },
+    {
+      "description": "PUT REQUEST",
+      "request": {
+        "method": "PUT",
+        "path": "/employee/1",
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "firstName": "adarsh",
+          "lastName": "kumar-singh",
+          "career": "It",
+          "id": 1
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "data": {
+            "firstName": "adarsh",
+            "lastName": "kumar-singh",
+            "career": "It",
+            "id": 1
+          },
+          "message": "Data Updated Successfully"
+        }
+      },
+      "providerStates": [
+        {
+          "name": "Test Put Employee "
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "3.6.3"
+    }
+  }
+}
